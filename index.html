@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>2D Terrain Mk4</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="gifJS/gif.js" type="text/javascript"></script>
+  
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div class="canvasHolder">
+    <div class="map">
+      
+      <canvas id="terrain" class="buffer"></canvas><br>
+      <button onclick="terrainMap.generate()" class="mainGenBtn">Generate Terrain</button> 
+      Floor At Water: <input type="checkbox" id="terrainFloorAtWater" checked="true"> <br>
+      Style Beaches: <input type="checkbox" id="terrainStyleBeaches" checked="true">
+      
+    </div>
+    <div class="map">
+      
+      <canvas id="height" class="buffer"></canvas><br>
+      <button onclick="heightMap.generate()" class="mainGenBtn">Generate Height</button>
+      Flip Values: <input type="checkbox" id="heightFlipValues"> <br>
+      Noise Scale: <div class="INPUTRANGE"> id=heightScale min=0.5 max=10 type=range step=0.5 value=1.5 </div>
+      Noise Blur Size: <div class="INPUTRANGE"> id=heightBlurKernelSize min=1 max=21 type=range step=2 value=9 </div>
+      Islandness: <div class="INPUTRANGE"> id=heightIslandness min=0 max=1 type=range step=0.01 value=0.5 </div>
+  
+    </div>
+    <div class="map">
+      
+      <canvas id="light" class="buffer"></canvas><br>
+      <button onclick="lightMap.generate()" class="mainGenBtn">Generate Light</button>
+      Floor At Water: <input type="checkbox" id="lightFloorAtWater" checked="true"> <br>
+      Light Angle: <div class="INPUTRANGE"> id=lightAngle min=0 max=360 type=range step=0.5 value=230 </div>
+      Light Pitch: <div class="INPUTRANGE"> id=lightPitch min=0 max=5 type=range step=0.01 value=0.3 </div>    
+      
+    </div> 
+  </div>
+  
+  Water Level: <div class="INPUTRANGE"> id=waterLevel min=0 max=1 type=range step=0.01 value=0.7 </div>
+  Water Blocking: <div class="INPUTRANGE"> id=waterBlocking min=0 max=5 type=range step=0.01 value=2 </div>    
+  Width: <input id="mapWidth" type="number" value="600"><br>
+  Height: <input id="mapHeight" type="number" value="600"><br>
+  
+  <button onclick="runPresets()" class="mainGenBtn">Run Preset</button>
+  <button onclick="download(canvas, 'Composite')" class="mainGenBtn">Download</button>
+  
+  <!--<script src="gifJS/gif.js"></script>-->
+  <script src="utils.js"></script>
+  <script src="perlin.js"></script>
+  <script src="canvasFilters.js"></script>
+  <script src="terrainMap.js"></script>
+  <script src="heightMap.js"></script>
+  <script src="lightMap.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -72,11 +72,11 @@ async function runPresets() {
     await lightMap.generate();
     download(canvas, "Composite");
   }else if(true){
-    let stepSize = 90;
+    let stepSize = 2;
     
     var gif = new GIF({
       workers: 2,
-      quality: 100
+      quality: 10
     });
     
     for(let i = 0; i < 360 / stepSize; i++){

@@ -83,16 +83,9 @@ async function runPresets() {
       await lightMap.generate();
       getElem("lightAngle").value = Math.floor(parseInt(getElem("lightAngle").value) + stepSize) % 360;
 
-      // or copy the pixels from a canvas context
-      //gif.addFrame(ctx, {copy: true, delay: 200});
-      gif.addFrame(canvas, {delay: 200});
-      
+      gif.addFrame(canvas, {copy: true, delay: 200});      
     }
     
-    /*gif.on('finished', function(blob) {
-      alert("finished rednering")
-      window.open(URL.createObjectURL(blob));
-    });*/
     gif.on('finished', function(blob) {
       alert("finished rednering")
       const a = document.createElement('a');

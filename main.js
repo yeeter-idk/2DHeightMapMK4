@@ -83,7 +83,7 @@ async function runPresets() {
       await lightMap.generate();
       getElem("lightAngle").value = Math.floor(parseInt(getElem("lightAngle").value) + stepSize) % 360;
 
-      gif.addFrame(canvas, {copy: true, delay: 200});      
+      gif.addFrame(canvas, {copy: true, delay: 100});      
     }
     
     gif.on('finished', function(blob) {

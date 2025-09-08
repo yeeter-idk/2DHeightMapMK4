@@ -71,7 +71,7 @@ async function runPresets() {
     await terrainMap.generate();
     await lightMap.generate();
     download(canvas, "Composite");
-  }else if(true){
+  }else if(false){
     let stepSize = 2;
     
     var gif = new GIF({
@@ -100,12 +100,33 @@ async function runPresets() {
     
   }else{
     let stepSize = 2;
+    
+    var gif = new GIF({
+      workers: 2,
+      quality: 3
+    });
+    
     for(let i = 0; i < 360 / stepSize; i++){
       await heightMap.generate();
       await terrainMap.generate();
       await lightMap.generate();
       
       getElem("lightAngle").value = Math.floor(parseInt(getElem("lightAngle").value) + stepSize) % 360;
+      
+      gif.addFrame(canvas, {copy: true, delay: 50});      
     }
+    
+    gif.on('finished', function(blob) {
+      alert("finished rednering")
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = "my-animation.gif";
+      a.click();
+    });
+
+    
+    alert("done the animation")
+    gif.render();
+    
   }
 }

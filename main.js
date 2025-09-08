@@ -76,14 +76,14 @@ async function runPresets() {
     
     var gif = new GIF({
       workers: 2,
-      quality: 10
+      quality: 3
     });
     
     for(let i = 0; i < 360 / stepSize; i++){
       await lightMap.generate();
       getElem("lightAngle").value = Math.floor(parseInt(getElem("lightAngle").value) + stepSize) % 360;
 
-      gif.addFrame(canvas, {copy: true, delay: 100});      
+      gif.addFrame(canvas, {copy: true, delay: 50});      
     }
     
     gif.on('finished', function(blob) {

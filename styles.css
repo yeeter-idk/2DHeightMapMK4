@@ -4,6 +4,39 @@ html, body{
   height: 100%;
 }
 
+@keyframes rgbThrobber {
+  0% {
+    color: red;
+  }
+  16.66% {
+    color: yellow;
+  }
+  33.33% {
+    color: lime;
+  }
+  50% {
+    color: cyan;
+  }
+  66.66% {
+    color: blue;
+  }
+  83.33% {
+    color: magenta;
+  }
+  100% {
+    color: red;
+  }
+}
+
+.currentlyGenerating{
+  animation-name: rgbThrobber;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-direction: forward;
+  animation-timing-function: linear;
+  background-color: #bababa;
+}
+
 *{
   font-family: arial;
 }
@@ -13,6 +46,7 @@ canvas{
   /*outline: 1px solid black;*/
   scroll-snap-align: start;
   image-rendering: pixelated;
+  padding: auto;
 }
 
 .mainGenBtn{

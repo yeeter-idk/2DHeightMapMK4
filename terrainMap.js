@@ -1,6 +1,8 @@
 let terrainMap = {
   canvas: "error",
   ctx: "error",
+  btnElement: "error",
+  generating: false,
   floorWater: false,
   styleBeaches: false,
   waterBlocking: 2,
@@ -56,6 +58,7 @@ let terrainMap = {
   initialize: function() {
     this.canvas = getElem("terrain");
     this.ctx = this.canvas.getContext("2d", {willReadFrequently: true});
+    this.btnElement = getElem("terrainBtn");    
     
     this.setup();
   },
@@ -77,8 +80,21 @@ let terrainMap = {
     }    
     return false;
   },
+  startedGenerating: function() {
+    this.btnElement.classList.add("currentlyGenerating");
+    this.generating = true;
+  },
+  endedGenerating: function() {
+    this.btnElement.classList.remove(
+    "currentlyGenerating");
+    this.generating = false;
+  },
   generate: async function() {
+    if(this.generating) return;
+    
     updateSpecs();
+    
+    this.startedGenerating();
     
     let heightData = heightMap.ctx.getImageData(0, 0, specs.width, specs.height).data;
     
@@ -120,5 +136,7 @@ let terrainMap = {
     this.ctx.putImageData(imageData, 0, 0);
     
     updateOutputCanvas();
+    
+    this.endedGenerating();    
   }
 };

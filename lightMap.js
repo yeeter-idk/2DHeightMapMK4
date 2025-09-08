@@ -1,6 +1,8 @@
 let lightMap = {
   canvas: "error",
   ctx: "error",
+  btnElement: "error",
+  generating: false,
   floorWater: true,
   sunVec: normalize3(vec3(-1, -1, 0.3)),
   lightAngle: 0,
@@ -13,6 +15,7 @@ let lightMap = {
   initialize: function() {
     this.canvas = getElem("light");
     this.ctx = this.canvas.getContext("2d", {willReadFrequently: true});
+    this.btnElement = getElem("lightBtn");
     
     this.setup();
   },
@@ -31,8 +34,21 @@ let lightMap = {
     this.floorWater = getElem("lightFloorAtWater").checked;
     
   },
+  startedGenerating: function() {
+    this.btnElement.classList.add("currentlyGenerating");
+    this.generating = true;
+  },
+  endedGenerating: function() {
+    this.btnElement.classList.remove(
+    "currentlyGenerating");
+    this.generating = false;
+  },
   generate: async function() {
+    if(this.generating) return;
+    
     updateSpecs();
+    
+    this.startedGenerating();
     
     let heightData = heightMap.heightData;
     
@@ -88,9 +104,11 @@ let lightMap = {
       await frameDelay();
     }
     
-    this.ctx.putImageData(imageData, 0, 0);
+    this.ctx.putImageData(imageData, 0, 0);    
     
     updateOutputCanvas();
+    
+    this.endedGenerating();    
   },
   bounded: function(vec) {
     if(vec.x < 0 || vec.x >= specs.width || vec.y < 0 || vec.y >= specs.height || vec.z >= specs.elevationScale) return false;

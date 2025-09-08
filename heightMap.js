@@ -1,6 +1,8 @@
 let heightMap = {
   canvas: "error",
   ctx: "error",
+  btnElement: "error",
+  generating: false,
   blurKernelSize: 11,
   noiseScale: 1,
   islandness: 0.5,
@@ -11,6 +13,7 @@ let heightMap = {
   initialize: function() {
     this.canvas = getElem("height");
     this.ctx = this.canvas.getContext("2d", {willReadFrequently: true});
+    this.btnElement = getElem("heightBtn");
     this.heightData = new Uint16Array(0);
     this.heightDataFactor = 2 ** 16 - 1;
     
@@ -86,8 +89,21 @@ let heightMap = {
       await this.pasteLayer(size, size, strength / sumStrength);
     }
   },
+  startedGenerating: function() {
+    this.btnElement.classList.add("currentlyGenerating");
+    this.generating = true;
+  },
+  endedGenerating: function() {
+    this.btnElement.classList.remove(
+    "currentlyGenerating");
+    this.generating = false;
+  },
   generate: async function() {
+    if(this.generating) return;
+    
     updateSpecs();
+    
+    this.startedGenerating();
     
     this.ctx.fillStyle = "black";
     this.ctx.fillRect(0, 0, specs.width, specs.height);
@@ -171,6 +187,8 @@ let heightMap = {
     }
     
     this.ctx.putImageData(imageData, 0, 0);
+    
+    this.endedGenerating();    
   },
   createBlurKernel: function() {
     let kernelRad = (this.blurKernelSize - 1) / 2;

@@ -66,12 +66,13 @@ function updateOutputCanvas() {
 }
   
 async function runPresets() {
-  if(false){
+  let choice = getElem("presetSelected").value;
+  if(choice == "1"){
     await heightMap.generate();
     await terrainMap.generate();
     await lightMap.generate();
     download(canvas, "Composite");
-  }else if(false){
+  }else if(choice == "2"){
     let stepSize = 2;
     
     var gif = new GIF({
@@ -98,7 +99,7 @@ async function runPresets() {
     alert("done the animation")
     gif.render();
     
-  }else{
+  }else if(choice == "3"){
     let stepSize = 2;
     
     var gif = new GIF({
@@ -124,6 +125,35 @@ async function runPresets() {
       a.click();
     });
 
+    
+    alert("done the animation")
+    gif.render();
+    
+  }else if(choice == "4"){
+    var gif = new GIF({
+      workers: 2,
+      quality: 3
+    });
+    
+    for(let i = 0; i < 40; i++){
+      let value = 0.5 * (i + 1 - (i > 20 ? i - 20 : 0));
+      
+      getElem("heightScale").value = value;
+      
+      await heightMap.generate();
+      await terrainMap.generate();
+      await lightMap.generate();
+      
+      gif.addFrame(canvas, {copy: true, delay: 50});
+    }
+    
+    gif.on('finished', function(blob) {
+      alert("finished rednering")
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = "my-animation.gif";
+      a.click();
+    });
     
     alert("done the animation")
     gif.render();

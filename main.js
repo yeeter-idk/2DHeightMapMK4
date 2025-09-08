@@ -136,7 +136,7 @@ async function runPresets() {
     });
     
     for(let i = 0; i < 40; i++){
-      let value = 0.5 * (i + 1 - (i > 20 ? i - 20 : 0));
+      let value = Math.min(0.5 * (i + 1), 10) - (i > 20 ? i - 20 : 0) * 0.5;
       
       getElem("heightScale").value = value;
       

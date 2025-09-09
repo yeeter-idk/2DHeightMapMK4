@@ -2,6 +2,7 @@ let heightMap = {
   canvas: "error",
   ctx: "error",
   btnElement: "error",
+  inputImage: "error",
   generating: false,
   blurKernelSize: 11,
   noiseScale: 1,
@@ -141,8 +142,8 @@ let heightMap = {
         let x = index % specs.width;
         let y = Math.floor(index / specs.width);
         
-        let pixelValue = 0;
-        
+        let pixelValue = 0;      
+         
         
         let sum = 0;        
         for(let sample of kernel){
@@ -190,6 +191,38 @@ let heightMap = {
     
     this.endedGenerating();    
   },
+  normalizeImage: async function() {
+    this.startedGenerating();
+    
+    let pixels = specs.width * specs.height;
+    
+    let inpData = this.ctx.getImageData(0, 0, specs.width, specs.height).data;
+    
+    let imageData = this.ctx.getImageData(0, 0, specs.width, specs.height);
+    let data = imageData.data;
+    
+    let index = 0;
+    while(index < pixels){
+      for(let j = 0; j < specs.ppf && index < pixels; j++){
+        let aveInput = (inpData[index * 4] + inpData[index * 4 + 1] + inpData[index * 4 + 2]) / 3;
+        
+        let uInt16 = Math.floor(aveInput/255 * this.heightDataFactor);
+        
+        this.heightData[index] = uInt16;
+        
+        data[index * 4] = data[index * 4 + 1] = data[index * 4 + 2] = aveInput;
+        index++;
+      }
+      
+      if(this.doPreview()) this.ctx.putImageData(imageData, 0, 0);
+      
+      await frameDelay();
+    }  
+    
+    this.ctx.putImageData(imageData, 0, 0);
+    
+    this.endedGenerating();   
+  },
   createBlurKernel: function() {
     let kernelRad = (this.blurKernelSize - 1) / 2;
     let samples = [];
@@ -207,3 +240,39 @@ let heightMap = {
     return samples;
   }
 };
+
+const fileInput = document.getElementById("heightInputImage");
+
+fileInput.addEventListener('change', async (event) => {
+  const selectedFile = event.target.files[0];
+  
+  if (selectedFile) {
+    if (selectedFile.type.startsWith('image/')) {
+      const reader = new FileReader();
+      
+      reader.onload = async (e) => {
+        heightMap.inputImage = new Image();
+        heightMap.inputImage.onload = async () => {
+          updateSpecs();
+          
+          specs.height = Math.round(specs.width * (heightMap.inputImage.height / heightMap.inputImage.width));
+          
+          getElem("mapWidth").value = specs.width;
+          getElem("mapHeight").value = specs.height;
+          
+          updateSpecs();
+          
+          heightMap.ctx.drawImage(heightMap.inputImage, 0, 0, specs.width, specs.height);
+          
+          await heightMap.normalizeImage();
+        };
+
+        heightMap.inputImage.src = e.target.result;
+      };
+
+      reader.readAsDataURL(selectedFile);
+    } else {
+      alert('Selected file is not an image.');
+    }
+  }
+});

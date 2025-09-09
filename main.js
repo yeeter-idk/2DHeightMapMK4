@@ -15,6 +15,15 @@ lightMap.generate();
 let canvas = getElem("canvas");
 let ctx = canvas.getContext("2d", {willReadFrequently: true});
 
+let allRangeElements = [];
+function updateAllRangeElements() {
+  const changeEvent = new Event('change', { bubbles: true });
+  
+  for(let elem of allRangeElements){
+    elem.dispatchEvent(changeEvent);
+  }
+}
+
 let specs = {
   width: 600,
   height: 600,
@@ -26,6 +35,8 @@ let specs = {
 };
 
 function updateSpecs() {
+  updateAllRangeElements();
+          
   specs.waterLevel = parseFloat(getElem("waterLevel").value);
   specs.width = parseFloat(getElem("mapWidth").value);
   specs.height = parseFloat(getElem("mapHeight").value);

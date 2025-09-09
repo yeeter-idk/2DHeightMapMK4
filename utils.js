@@ -58,6 +58,8 @@ function BUILDINPUTRANGE(elem) {
     inputElem[key] = getValOf(key);
   }
   
+  allRangeElements.push(inputElem);
+  
   let labelElem = document.createElement("span");
   labelElem.classList.add("INPUTRANGEDISPLAY");
   let inputFunc = ()=>{

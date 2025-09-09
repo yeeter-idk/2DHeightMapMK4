@@ -68,7 +68,7 @@ let lightMap = {
         if(this.floorWater) elevation = Math.max(elevation, specs.waterLevel);       
         elevation *= specs.elevationScale;
         
-        let pos = vec3(x, y, elevation);
+        let pos = vec3(x + 0.5, y + 0.5, elevation);
         let shaded = false;  
         while(true){
           pos.x += this.sunVec.x;
